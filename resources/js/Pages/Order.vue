@@ -44,8 +44,7 @@ const total = computed(() => {
 
 function formatAmount(amount: number) {
     const format = Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
+        style: 'decimal',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
@@ -62,11 +61,11 @@ function formatAmount(amount: number) {
 
             <div class="flex w-[1200px]">
                 <div class="w-1/3">
-                    <h2 class="bg-blue-600 p-6 uppercase text-white">
+                    <h2 class="bg-black p-4 uppercase text-white">
                         Delivering to
                     </h2>
 
-                    <div class="flex flex-col gap-4 p-6">
+                    <div class="flex flex-col gap-4 p-4">
                         <div>
                             <div class="uppercase text-gray-400">Recipient</div>
                             <div>John Smith</div>
@@ -81,7 +80,7 @@ function formatAmount(amount: number) {
                             </address>
                         </div>
 
-                        <hr class="-mx-6" />
+                        <hr class="-mx-4" />
 
                         <div>
                             <div class="uppercase text-gray-400">
@@ -93,77 +92,54 @@ function formatAmount(amount: number) {
                 </div>
 
                 <div class="w-2/3">
-                    <h2 class="bg-blue-600 p-6 uppercase text-white">
+                    <h2 class="bg-black p-4 uppercase text-white">
                         Your order
                     </h2>
 
-                    <div class="p-6">
-                        <table class="w-full border">
-                            <thead class="bg-gray-200">
-                                <tr>
-                                    <td
-                                        class="px-4 py-2 uppercase text-gray-400"
-                                    >
-                                        Quantity
-                                    </td>
-                                    <td
-                                        class="px-4 py-2 uppercase text-gray-400"
-                                    >
-                                        Product
-                                    </td>
-                                    <td
-                                        class="px-4 py-2 text-right uppercase text-gray-400"
-                                    >
-                                        Cost
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    class="border-b"
-                                    v-for="(line, index) in lines"
-                                    :key="index"
-                                >
-                                    <td class="px-4 py-2">
-                                        {{ line.quantity }}
-                                    </td>
-                                    <td class="px-4 py-2">
-                                        {{ line.product }}
-                                    </td>
-                                    <td class="px-4 py-2 text-right">
-                                        {{ formatAmount(line.cost) }}
-                                    </td>
-                                </tr>
-                                <tr class="border-b">
-                                    <td class="px-4 py-2" colspan="2">
-                                        Subtotal
-                                    </td>
-                                    <td class="px-4 py-2 text-right">
-                                        {{ formatAmount(subtotal) }}
-                                    </td>
-                                </tr>
-                                <tr class="border-b">
-                                    <td class="px-4 py-2" colspan="2">Taxes</td>
-                                    <td class="px-4 py-2 text-right">
-                                        {{ formatAmount(taxes) }}
-                                    </td>
-                                </tr>
-                                <tr class="border-b">
-                                    <td class="px-4 py-2" colspan="2">
-                                        Shipping
-                                    </td>
-                                    <td class="px-4 py-2 text-right">
-                                        {{ formatAmount(shipping) }}
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td class="px-4 py-2" colspan="2">Total</td>
-                                    <td class="px-4 py-2 text-right">
-                                        {{ formatAmount(total) }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="">
+                        <div class="border-b py-4">
+                            <div
+                                class="flex"
+                                v-for="(line, index) in lines"
+                                :key="index"
+                            >
+                                <div class="flex-1 px-4 py-2">
+                                    {{ line.product }}
+                                </div>
+                                <div class="w-[200px] px-4 py-2 text-right">
+                                    {{ line.quantity }}
+                                </div>
+                                <div class="w-[200px] px-4 py-2 text-right">
+                                    {{ formatAmount(line.cost) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="py-4">
+                            <div class="flex">
+                                <div class="flex-1 px-4 py-2">Subtotal</div>
+                                <div class="px-4 py-2 text-right">
+                                    {{ formatAmount(subtotal) }}
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="flex-1 px-4 py-2">Taxes</div>
+                                <div class="px-4 py-2 text-right">
+                                    {{ formatAmount(taxes) }}
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="flex-1 px-4 py-2">Shipping</div>
+                                <div class="px-4 py-2 text-right">
+                                    {{ formatAmount(shipping) }}
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="flex-1 px-4 py-2">Total</div>
+                                <div class="px-4 py-2 text-right">
+                                    {{ formatAmount(total) }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

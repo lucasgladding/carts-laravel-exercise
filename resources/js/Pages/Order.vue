@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import DataTable, {
+    DataTableColumn,
+    DataTableFooter,
+} from '@/Components/DataTable.vue';
 import CustomLayout from '@/Layouts/CustomLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { computed } from 'vue';
+
+const TAX_RATE = 0.15;
 
 type OrderLine = {
     quantity: number;
@@ -9,7 +15,11 @@ type OrderLine = {
     cost: number;
 };
 
-const TAX_RATE = 0.1;
+const columns: DataTableColumn<OrderLine>[] = [
+    { field: 'product' },
+    { field: 'quantity' },
+    { field: 'cost' },
+];
 
 const lines: OrderLine[] = [
     {
@@ -50,6 +60,13 @@ function formatAmount(amount: number) {
     });
     return format.format(amount);
 }
+
+const footers: DataTableFooter[] = computed(() => [
+    { name: 'Subtotal', value: subtotal.value },
+    { name: 'Taxes', value: taxes.value },
+    { name: 'Shipping', value: shipping.value },
+    { name: 'Total', value: total.value },
+]);
 </script>
 
 <template>
@@ -80,7 +97,7 @@ function formatAmount(amount: number) {
                             </address>
                         </div>
 
-                        <hr class="-mx-4" />
+                        <hr />
 
                         <div>
                             <div class="uppercase text-gray-400">
@@ -96,51 +113,12 @@ function formatAmount(amount: number) {
                         Your order
                     </h2>
 
-                    <div class="">
-                        <div class="border-b py-4">
-                            <div
-                                class="flex"
-                                v-for="(line, index) in lines"
-                                :key="index"
-                            >
-                                <div class="flex-1 px-4 py-2">
-                                    {{ line.product }}
-                                </div>
-                                <div class="w-[200px] px-4 py-2 text-right">
-                                    {{ line.quantity }}
-                                </div>
-                                <div class="w-[200px] px-4 py-2 text-right">
-                                    {{ formatAmount(line.cost) }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="py-4">
-                            <div class="flex">
-                                <div class="flex-1 px-4 py-2">Subtotal</div>
-                                <div class="px-4 py-2 text-right">
-                                    {{ formatAmount(subtotal) }}
-                                </div>
-                            </div>
-                            <div class="flex">
-                                <div class="flex-1 px-4 py-2">Taxes</div>
-                                <div class="px-4 py-2 text-right">
-                                    {{ formatAmount(taxes) }}
-                                </div>
-                            </div>
-                            <div class="flex">
-                                <div class="flex-1 px-4 py-2">Shipping</div>
-                                <div class="px-4 py-2 text-right">
-                                    {{ formatAmount(shipping) }}
-                                </div>
-                            </div>
-                            <div class="flex">
-                                <div class="flex-1 px-4 py-2">Total</div>
-                                <div class="px-4 py-2 text-right">
-                                    {{ formatAmount(total) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <DataTable
+                        class="p-4"
+                        :columns="columns"
+                        :items="lines"
+                        :footers="footers"
+                    />
                 </div>
             </div>
         </div>

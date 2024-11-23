@@ -15,10 +15,28 @@ type OrderLine = {
     cost: number;
 };
 
+function formatQuantity(value: number): string {
+    return `x ${value}`;
+}
+
+function formatAmount(amount: number): string {
+    const format = Intl.NumberFormat('en-US', {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+    return format.format(amount);
+}
+
 const columns: DataTableColumn<OrderLine>[] = [
     { field: 'product' },
-    { field: 'quantity' },
-    { field: 'cost' },
+    {
+        field: 'quantity',
+        alignment: 'right',
+        width: 100,
+        format: formatQuantity,
+    },
+    { field: 'cost', alignment: 'right', width: 300, format: formatAmount },
 ];
 
 const lines: OrderLine[] = [
@@ -52,20 +70,11 @@ const total = computed(() => {
     return subtotal.value + taxes.value + shipping.value;
 });
 
-function formatAmount(amount: number) {
-    const format = Intl.NumberFormat('en-US', {
-        style: 'decimal',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
-    return format.format(amount);
-}
-
 const footers: DataTableFooter[] = computed(() => [
-    { name: 'Subtotal', value: subtotal.value },
-    { name: 'Taxes', value: taxes.value },
-    { name: 'Shipping', value: shipping.value },
-    { name: 'Total', value: total.value },
+    { name: 'Subtotal', value: subtotal.value, format: formatAmount },
+    { name: 'Taxes', value: taxes.value, format: formatAmount },
+    { name: 'Shipping', value: shipping.value, format: formatAmount },
+    { name: 'Total', value: total.value, format: formatAmount },
 ]);
 </script>
 
